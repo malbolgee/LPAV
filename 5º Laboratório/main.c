@@ -27,7 +27,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    crack(argv[2], size);
+    password_crack(argv[2], size);
 
     return 0;
 }
