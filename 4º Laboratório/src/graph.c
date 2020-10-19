@@ -20,22 +20,20 @@ graph_t *graph_init(const size_t _size)
     return graph;
 }
 
-void graph_push_in(void *_item, size_t src, graph_t *graph)
+void graph_push_in(void *_item, size_t dst, graph_t *graph)
 {
 
-    list_add_start(_item, &graph->adjacency_list[src]);
+    list_add_start(_item, &graph->adjacency_list[dst]);
 }
 
-void graph_show(graph_t *graph, __data_access_t func_show)
+void graph_show(graph_t *graph, __data_access_fn_t func_show)
 {
 
     for (size_t i = 0; i < graph->n_vertex; ++i)
     {
 
         printf("NÓ %lu: ", i);
-        for (node_t *j = graph->adjacency_list[i]; j != NULL; j = j->next)
-            func_show(j->item);
-
+        list_show(graph->adjacency_list[i], func_show);
         putchar('\n');
     }
 }
@@ -52,7 +50,7 @@ void graph_free(graph_t *graph)
     graph = NULL;
 }
 
-void graph_djikstra(void *dist, graph_t *graph, const int src, void *bdist, size_t mwidth, __compar_t compare, __assign_fn_t assign, void *infc, __oprtn_fn_t operation)
+void graph_djikstra(graph_t *graph, void *dist, size_t mwidth, const int src, void *bdist, void *infc, __compar_t compare, __assign_fn_t assign,  __oprtn_fn_t operation)
 {
 
     char *base_dist = (char *)dist;

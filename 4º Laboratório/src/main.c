@@ -26,7 +26,7 @@ typedef struct _event
 void usage(void);
 lli func_show(const void *);
 
-lli compar_ord(const void *a, const void *b);
+int compar_ord(const void *a, const void *b);
 static void begin_simulation(graph_t *graph, list_t **list);
 static event_t *make_new_event(int type, int target, double time);
 static void populate(graph_t *_graph, pos_t *_pos, const double _conn_r);
@@ -42,6 +42,7 @@ int main(int argc, char **argv)
     }
 
     FILE *fp = fopen(argv[1], "r");
+    _alloc_check(fp, "Erro ao abrir arquivo.");
 
     size_t size = 0;
     double conn_radius = 0.0;
@@ -169,7 +170,7 @@ static void populate(graph_t *_graph, pos_t *_pos, const double _conn_r)
     }
 }
 
-lli compar_ord(const void *a, const void *b)
+int compar_ord(const void *a, const void *b)
 {
 
     const double r = ((event_t *)a)->time - ((event_t *)b)->time;

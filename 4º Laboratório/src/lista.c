@@ -72,18 +72,18 @@ bool list_add_ord(void *_item, list_t **list, __compar_t compare)
     }
 }
 
-ptr_list_ref_t *list_search(const void *_item, list_t *_list, ptr_list_ref_t *_ret, __compar_t compare)
+void list_search(const void *_item, list_t *_list, ptr_list_ref_t *_ret, __compar_t compare)
 {
 
     if (_list == NULL)
-        return NULL;
+        return;
     else if (compare(_list->item, _item) == 0LL)
     {
 
         _ret->prev = NULL;
         _ret->cur = _list;
         _ret->_next = _list->next;
-        return _ret;
+        return;
     }
     else
     {
@@ -98,13 +98,13 @@ ptr_list_ref_t *list_search(const void *_item, list_t *_list, ptr_list_ref_t *_r
                 _ret->prev = _tmp;
                 _ret->cur = _tmp->next;
                 _ret->_next = _tmp->next->next;
-                return _ret;
+                return;
             }
 
             _tmp = _tmp->next;
         }
 
-        return NULL;
+        return;
     }
 }
 
@@ -159,6 +159,20 @@ list_t *list_pop_head(list_t **list)
     *list = (*list)->next;
     return _tmp;
 }
+
+void list_show(list_t *list, __data_access_fn_t func_s)
+{
+
+    list_t *_tmp = list;
+
+    while (_tmp)
+    {
+        func_s(_tmp->item);
+        _tmp = _tmp->next;
+    }
+
+}
+
 
 void list_free(list_t **list)
 {
