@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <math.h>
-#include <string.h>
 #include <stdlib.h>
-
-void password_crack(char *, int);
-void password_generate(char *, int, char *, int);
+#include <string.h>
 
 void usage(void);
+void password_crack(char *, int, int);
 
 int main(int argc, char **argv)
 {
 
-    if (argc < 3 || argc > 3)
+    // 0 to (C + C^2 + C^3 + .. + C^n);
+    // ((1 - x^(n + 1)) / (1 - x)) - 1;
+
+    // C tamanho do alfabeto
+    // N tamanho do password
+
+    if (argc < 3 || argc > 3)   
     {
 
         usage();
@@ -27,55 +31,41 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    password_crack(argv[2], size);
+    int len = strlen(argv[2]);
+
+    for (size_t i = 1; i <= size; ++i)
+        password_crack(argv[2], i, len);
 
     return 0;
 }
 
-void password_crack(char *alphabet, int len)
-{   
-
-    char c[len];
-    memset(c, 0, sizeof(char) * len);
-    for (int i = 1; i <= len; ++i)
-        password_generate(alphabet, i, c, len);
-
-}
-
-void password_generate(char *alphabet, int i, char *string, int len)
+void password_crack(char *alphabet, int plength, int len)
 {
 
-    if (i == 0)
-    {
-        printf("%s\n", string);
-        return;
-    }
-
-    for (int j = 0; j < len; ++j)
+    for (int i = 0; i < (int)pow(len, plength); ++i)
     {
 
-        char c[len];
-        char _c[len];
+        int x = i;
+        char s[plength];
+        memset(s, 0, sizeof(char) * plength);
 
-        memset(c, 0, sizeof(char) * len);
-        memset(_c, 0, sizeof(char) * len);
+        for (int j = 0; j < plength; ++j)
+        {
 
-        strcat(_c, string);
+            char _s[2] = {0};
+            _s[0] = alphabet[x % len];
+            strcat(s, _s);
 
-        int index = strlen(_c);
-        _c[index] = alphabet[j];
-        strcat(c, _c);
+            x /= len;
+        }
 
-        password_generate(alphabet, i - 1, c, len);
+        printf("%s\n", s);
     }
-
-    return;
-
 }
+
 
 void usage(void)
 {
 
     puts("main <TAMANHO_MÁXIMO> <ALFABETO>");
-    return;
 }
