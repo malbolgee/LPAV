@@ -173,7 +173,7 @@ lli compar_ord(const void *a, const void *b)
 {
 
     const double r = ((event_t *)a)->time - ((event_t *)b)->time;
-    if ((r < 0.001) && (r > (-0.001)))
+    if ((r < 0.0000001) && (r > (-0.0000001)))
     {
 
         if (((event_t *)a)->target <= ((event_t *)b)->target)
